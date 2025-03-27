@@ -1,0 +1,12 @@
+<video id="childScreen" autoplay></video>
+<script>
+  const socket = io('http://localhost:3000');
+  navigator.mediaDevices.getDisplayMedia({ video: true }).then(stream => {
+    document.getElementById('childScreen').srcObject = stream;
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = (e) => {
+      socket.emit('screen-stream', e.data);
+    };
+    mediaRecorder.start(1000);
+  });
+</script>
